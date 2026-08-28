@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>For Saran ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500;600&family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+
+  <!-- ENVELOPE OVERLAY -->
+  <div id="envelope-overlay">
+    <div class="envelope">
+      <div class="env-body"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">S</div>
+    </div>
+    <div class="password-gate">
+      <p class="tap-hint"><span>A little something for you</span>enter the code to open</p>
+      <input type="password" id="envelope-password" inputmode="numeric" maxlength="6" autocomplete="off">
+      <button id="envelope-submit">Open</button>
+      <p class="password-error" id="password-error">that's not quite it, try again 💗</p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: INTRO -->
+  <section id="intro">
+    <svg class="branch-corner" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 20 Q60 40 90 10 Q120 -10 160 30" stroke="#c9a97e" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="40" cy="28" r="8" fill="#ffd3e2"/><circle cx="70" cy="15" r="6" fill="#f7a8c4"/>
+      <circle cx="100" cy="22" r="7" fill="#ffd3e2"/><circle cx="130" cy="8" r="6" fill="#f7a8c4"/>
+      <circle cx="150" cy="26" r="5" fill="#ffd3e2"/>
+    </svg>
+    <svg class="branch-corner right" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 20 Q60 40 90 10 Q120 -10 160 30" stroke="#c9a97e" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="40" cy="28" r="8" fill="#ffd3e2"/><circle cx="70" cy="15" r="6" fill="#f7a8c4"/>
+      <circle cx="100" cy="22" r="7" fill="#ffd3e2"/><circle cx="130" cy="8" r="6" fill="#f7a8c4"/>
+      <circle cx="150" cy="26" r="5" fill="#ffd3e2"/>
+    </svg>
+    <div class="particle-layer" id="particles-intro"></div>
+    <div class="intro-content">
+      <div class="eyebrow">a small magic, just for you</div>
+      <h1 class="name-reveal brush">Saran</h1>
+      <svg class="route-line" viewBox="0 0 320 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 30 Q 80 5, 160 25 T 315 12" stroke="#f7a8c4" stroke-width="2.5" stroke-dasharray="1 10" stroke-linecap="round"/>
+        <circle cx="5" cy="30" r="4" fill="#d6789e"/>
+        <circle cx="315" cy="12" r="5" fill="#d6789e"/>
+        <text x="160" y="8" text-anchor="middle" font-size="14">🏍️</text>
+      </svg>
+      <p class="intro-sub">Every road we've ridden led back to each other. This one's for you.</p>
+    </div>
+  </section>
+
+  <!-- LIVE COUNTER SINCE HER BIRTH -->
+  <section id="counter">
+    <div class="counter-content reveal">
+      <h2 class="counter-title mincho">It's Been...</h2>
+      <div class="counter-grid">
+        <div class="counter-box"><span class="counter-num" id="c-days">0</span><span class="counter-label">days</span></div>
+        <div class="counter-box"><span class="counter-num" id="c-hours">0</span><span class="counter-label">hours</span></div>
+        <div class="counter-box"><span class="counter-num" id="c-mins">0</span><span class="counter-label">minutes</span></div>
+        <div class="counter-box"><span class="counter-num" id="c-secs">0</span><span class="counter-label">seconds</span></div>
+      </div>
+      <p class="counter-caption">...since you first came into this world, and it's been getting better ever since.</p>
+    </div>
+  </section>
+
+  <!-- MEETUP: July 8 -->
+  <section id="meetup">
+    <div class="meetup-card reveal">
+      <div class="meetup-label">where it all began</div>
+      <h2 class="meetup-title mincho">Our First Meetup</h2>
+      <div class="meetup-date">July 8, 2026</div>
+      <p class="meetup-text">Just the two of us, meeting for the very first time. I didn't tell you I was coming, I just showed up. And for a few seconds, you had no words at all. That look on your face, that silence, I still remember it like it was yesterday. I brought along a small, slightly odd bundle too, an Alpenliebe strawberry lollipop, a Cadbury Dairy Milk Bubbly, and a few vanilla Kisses. Nothing fancy, but somehow it was exactly us.</p>
+    </div>
+  </section>
+
+  <!-- SONG -->
+  <section id="song">
+    <div class="song-card reveal" id="song-toggle">
+      <div class="song-icon" id="song-icon">▶</div>
+
+      <div class="song-text">
+        <span class="song-label">a little song for the journey</span>
+      </div>
+
+      <div class="song-bars">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="song-audio" preload="metadata">
+      <source src="assets/audio/Uyire-Un-Uyirena.mp3" type="audio/mpeg">
+      Your browser does not support audio.
+    </audio>
+  </section>
+
+  <!-- JOURNEY: Trips -->
+  <section id="journey">
+    <h2 class="journey-title mincho">Every Trip, A Memory</h2>
+    <p class="journey-subtitle">We never lived in the same city, so every time we rode out to meet, it became its own journey. Here are the ones we'll never forget.</p>
+    <p class="route-caption">🏍️ every ride, a memory 🏍️</p>
+
+    <div class="trip-cards">
+      <div class="trip-card trip-card-stacked reveal rain-card">
+        <div class="trip-photo carousel">
+          <div class="carousel-slide active"><img src="assets/images/ambanad-1.jpg" alt="Us at Ambanad Estate"></div>
+          <div class="carousel-slide"><img src="assets/images/ambanad-2.jpg" alt="Us at Ambanad Estate"></div>
+          <div class="carousel-slide"><img src="assets/images/ambanad-3.jpg" alt="Us at Ambanad Estate"></div>
+          <div class="carousel-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <div class="trip-info trip-info-photo">
+          <div class="bg-slide slide-a"><img src="assets/images/ambanad-bg-1.jpg" alt="Us at Ambanad Estate"></div>
+          <div class="bg-slide slide-b"><img src="assets/images/ambanad-bg-2.jpg" alt="Us at Ambanad Estate"></div>
+          <h3 class="trip-place mincho">Ambanad Estate</h3>
+          <span class="trip-date">July 9, 2026</span>
+          <p class="trip-memory">Cool air, warm sun, a soft drizzle, then rain that couldn't decide how hard to fall, and somehow none of it mattered, because you were right there beside me. We rode out on your favorite Royal Enfield, chasing that shifting sky together. Somewhere deep in a quiet rubber tree forest, time seemed to pause, and we shared our first kiss. I slid two bangles onto your wrist that day, green glass and gold steel, a small promise wrapped in a drizzling sky, followed by more hugs than I could ever count.</p>
+        </div>
+      </div>
+
+      <div class="trip-card trip-card-stacked reveal">
+        <div class="trip-photo carousel">
+          <div class="carousel-slide active"><img src="assets/images/mathoor-1.jpg" alt="Us at Mathoor Aqueduct"></div>
+          <div class="carousel-slide"><img src="assets/images/mathoor-2.jpg" alt="Us at Mathoor Aqueduct"></div>
+          <div class="carousel-slide"><img src="assets/images/mathoor-3.jpg" alt="Us at Mathoor Aqueduct"></div>
+          <div class="carousel-dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <div class="trip-info trip-info-photo">
+          <div class="bg-slide slide-a"><img src="assets/images/mathoor-bg-1.jpg" alt="Us at Mathoor Aqueduct"></div>
+          <div class="bg-slide slide-b"><img src="assets/images/mathoor-bg-2.jpg" alt="Us at Mathoor Aqueduct"></div>
+          <h3 class="trip-place mincho">Mathoor Aqueduct, Nagercoil</h3>
+          <span class="trip-date">July 10, 2026</span>
+          <p class="trip-memory">That day we simply went to see the place, winding through mountains and past quiet lakes, mist settling over everything. Somewhere along the way, on a small bridge with a view we still talk about, with the rain drizzling softly, we lost ourselves for a moment in a kiss, until we realized someone had spotted us from a distance. We panicked, laughed, and ran like we'd robbed a bank. Still one of the funniest, most us moments we have.</p>
+        </div>
+      </div>
+
+      <div class="trip-card reveal">
+        <div class="trip-photo carousel">
+          <div class="carousel-slide active"><img src="assets/images/aralvaimozhi-1.jpg" alt="Us at Aralvaimozhi, photo 1"></div>
+          <div class="carousel-slide"><img src="assets/images/aralvaimozhi-2.jpg" alt="Us at Aralvaimozhi, photo 2"></div>
+          <div class="carousel-dots">
+            <span class="dot active"></span><span class="dot"></span>
+          </div>
+        </div>
+        <div class="trip-info">
+          <h3 class="trip-place mincho">Aralvaimozhi</h3>
+          <span class="trip-date">Aug 22, 2026 · 12:45 PM – 7 PM</span>
+          <p class="trip-memory">That day gave us something quietly special, hours together that still make us blush just thinking back on them. The ride home after was a different story, long distance, rough roads, tired bodies, genuinely one of our harder rides. But it was worth every bit of it. Seeing you with a headache worried me, and yet somewhere in that worry there was a quiet happiness too, because it was the very first time I got to be there for you while you were unwell, doing whatever I could, a hot face wash, and two cups of tea from a shop along the way, one turned out awful, the other just about okay. And through all of it, the lies I told my own family just to be able to be there with you, something I've never done for anyone else, never once felt like a cost. They just meant I got to have more of you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LETTER + PROMISE (merged into one flowing message) -->
+  <section id="letter">
+    <div class="particle-layer" id="particles-promise"></div>
+    <div class="letter-card reveal">
+      <div class="letter-hearts">
+        <span style="top:8%; left:6%; font-size:16px;">♡</span>
+        <span style="top:14%; right:8%; font-size:22px;">♥</span>
+        <span style="top:38%; left:4%; font-size:14px;">♡</span>
+        <span style="top:52%; right:5%; font-size:18px;">♥</span>
+        <span style="top:70%; left:8%; font-size:20px;">♡</span>
+        <span style="top:80%; right:10%; font-size:15px;">♥</span>
+        <span style="top:92%; left:14%; font-size:17px;">♡</span>
+        <span style="top:25%; left:50%; font-size:14px;">♥</span>
+      </div>
+      <p class="letter-body">
+        My Saran,<br><br>
+        The very first time I saw you was at my sister's wedding, on the 2nd of November, 2020. I felt something the moment I saw you, even if I couldn't quite explain what it was back then. After that, we'd talk once in a while, a message here and there on random days, spread out over months, with no real plan behind any of it.<br><br>
+        Then years later, out of nowhere, I found out you were coming to Chennai. And something shifted in me that I still can't fully put into words. I cleaned my room, my whole house, and, half joking, even the restroom, something I had genuinely never done before in my life. I just wanted everything to feel right for you, neat and cared for, the way I hoped you'd feel about coming all that way. Looking back now, that's really where our love story began.<br><br>
+        Everything since has felt like it was building toward something bigger, through every message, every mile, every visit. And standing here today, I know exactly what I want next.<br><br>
+        So here's my promise, plain and simple. I'm choosing this, all of it, again and again. Every uphill, every sharp turn, every storm we don't see coming. Not because loving you is easy, but because it's <em>you</em>. Let's keep traveling far, stumbling sometimes, and lifting each other back up every single time. Let's be each other's home, even from far away, until we're old and grey.<br><br>
+        And promise me one thing too, please take care of yourself. Eat well, keep yourself fit, look after your health, so we get to live this life long and strong together. There are still so many adventures waiting for us out there, and I want us both around for every single one of them.<br><br>
+        We both love tea more than we probably should, and somehow, in all this time, we still haven't had one really good cup of it together. That's alright. We've got a whole life ahead to get it right, one cup, one terrace, one rainy evening at a time.<br><br>
+        And one day, when the roads finally get quiet, I want us right there, hands held, tea between us, rain falling just outside, our old bike resting below instead of carrying us through another storm. No more distance left to chase. Just you and me, exactly where we were always meant to be.<br><br>
+        Today is your day, my love. So here's a small piece of ours, built only for you, every road, every memory, every reason I fell for you in the first place. Here's to many more rides, many more places, and a lifetime of reasons to run away laughing, together.
+      </p>
+      <div class="letter-sign">yours, always</div>
+    </div>
+  </section>
+
+  <!-- FINALE -->
+  <section id="finale">
+    <div class="particle-layer" id="particles-finale"></div>
+    <p class="finale-eyebrow mincho">Happy Birthday</p>
+    <h2 class="finale-title brush">Saran</h2>
+    <p class="finale-sub">Every mile apart has just been the universe testing how much we want this, and we want it more than anything. Soon there'll be no more distance to count down, no more waiting for the next visit. Just you and me, every single day.</p>
+    <button class="replay-btn" id="replay-btn">celebrate again</button>
+    <button class="logout-btn" id="logout-btn">close with a kiss 💋</button>
+  </section>
+
+  <!-- FAREWELL OVERLAY -->
+  <div id="farewell-overlay">
+    <div class="farewell-petals" id="farewell-petals"></div>
+    <div class="farewell-content">
+      <p class="farewell-mark mincho">🌸</p>
+      <h2 class="farewell-title brush">until next time</h2>
+      <p class="farewell-text">this letter will always be here, waiting for you, whenever you want to read it again. I love you, Saran.</p>
+      <button class="farewell-return" id="farewell-return">open it again</button>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>

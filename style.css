@@ -1,0 +1,430 @@
+:root{
+    --white:#fffdfb;
+    --blush:#fff2f6;
+    --petal:#ffd3e2;
+    --petal-deep:#f7a8c4;
+    --rose:#d6789e;
+    --rose-deep:#b45072;
+    --leaf:#93a084;
+    --ink:#4a3b3f;
+    --gold:#e2b872;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Quicksand', sans-serif;
+    background:var(--white);
+    color:var(--ink);
+    overflow-x:hidden;
+    width:100%;
+  }
+  .mincho{font-family:'Shippori Mincho', serif;}
+  .brush{font-family:'Klee One', cursive;}
+
+  section{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:70px 20px;
+    overflow:hidden;
+  }
+
+  /* ---------- SCROLL PROGRESS BAR ---------- */
+  #scroll-progress{
+    position:fixed; top:0; left:0; height:3px; width:0%;
+    background:linear-gradient(90deg, var(--petal-deep), var(--rose-deep));
+    z-index:500; transition:width 0.1s linear;
+  }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- ENVELOPE OVERLAY ---------- */
+  #envelope-overlay{
+    position:fixed; inset:0; z-index:999;
+    background:radial-gradient(ellipse at center, var(--blush) 0%, var(--white) 75%);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+    transition:opacity 1.1s ease, visibility 1.1s ease;
+    text-align:center;
+  }
+  #envelope-overlay.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  .envelope{
+    width:220px; height:150px; position:relative;
+    filter:drop-shadow(0 12px 28px rgba(214,120,158,0.25));
+    animation:float 3.5s ease-in-out infinite;
+  }
+  @keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+  .env-body{
+    position:absolute; inset:0;
+    background:var(--white);
+    border-radius:6px;
+    border:2px solid var(--petal-deep);
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; width:100%; height:0;
+    border-left:110px solid transparent;
+    border-right:110px solid transparent;
+    border-top:80px solid var(--blush);
+    transform-origin:top;
+    transition:transform 0.8s cubic-bezier(.6,-0.28,.74,.05);
+    z-index:2;
+  }
+  #envelope-overlay.open .env-flap{ transform:rotateX(180deg); }
+  .env-seal{
+    position:absolute; top:60px; left:50%; transform:translate(-50%,0);
+    width:44px; height:44px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--petal), var(--rose) 90%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; color:#fff; z-index:3; box-shadow:0 4px 10px rgba(180,80,114,0.3);
+  }
+  .tap-hint{ margin-top:34px; letter-spacing:2px; font-size:13px; color:var(--rose-deep); text-transform:uppercase; }
+  .tap-hint span{ display:block; font-family:'Shippori Mincho', serif; font-size:22px; color:var(--ink); letter-spacing:1px; margin-bottom:6px; font-style:italic;}
+  .password-gate{ display:flex; flex-direction:column; align-items:center; }
+  #envelope-password{
+    margin-top:16px; width:160px; text-align:center; letter-spacing:6px;
+    font-size:18px; padding:10px 14px; border-radius:24px;
+    border:1px solid var(--petal-deep); background:#fff; color:var(--ink);
+    outline:none;
+  }
+  #envelope-password:focus{ border-color:var(--rose); box-shadow:0 0 0 3px rgba(214,120,158,0.18); }
+  #envelope-submit{
+    margin-top:14px; padding:9px 26px; border-radius:24px;
+    background:var(--rose); color:#fff; border:none; font-size:13px;
+    letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+    transition:background 0.25s ease;
+  }
+  #envelope-submit:hover{ background:var(--rose-deep); }
+  .password-error{
+    margin-top:12px; font-size:12.5px; color:#c44f6a; opacity:0; height:0; overflow:hidden;
+    transition:opacity 0.3s ease;
+  }
+  .password-error.show{ opacity:1; height:auto; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%,60%{ transform:translateX(-8px); }
+    40%,80%{ transform:translateX(8px); }
+  }
+  .password-gate.shake{ animation:shake 0.4s ease; }
+
+  /* ---------- PETALS (used throughout) ---------- */
+  .particle-layer{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1;}
+  .petal{
+    position:absolute; top:-8%; opacity:0.85; will-change:transform, top; color:var(--petal-deep);
+    animation-name:fall; animation-timing-function:linear; animation-iteration-count:infinite;
+  }
+  @keyframes fall{
+    0%{ top:-8%; transform:translateX(0) rotate(0deg); }
+    100%{ top:108%; transform:translateX(var(--drift,20px)) rotate(360deg); }
+  }
+
+  /* ---------- SECTION 1: INTRO (sakura name reveal) ---------- */
+  #intro{
+    background:linear-gradient(180deg, var(--white) 0%, var(--blush) 100%);
+  }
+  .branch-corner{ position:absolute; top:-20px; left:-30px; width:220px; opacity:0.9; z-index:0; }
+  .branch-corner.right{ left:auto; right:-30px; top:auto; bottom:-20px; transform:scaleX(-1) rotate(180deg); }
+  .intro-content{ position:relative; z-index:2; text-align:center; }
+  .eyebrow{
+    font-size:13px; letter-spacing:4px; text-transform:uppercase; color:var(--rose); margin-bottom:14px;
+    opacity:0; animation:riseIn 1.2s ease forwards 0.3s;
+  }
+  .name-reveal{
+    font-size:clamp(3.4rem, 15vw, 7.5rem); font-weight:600; line-height:1;
+    color:var(--rose-deep);
+    text-shadow:0 4px 24px rgba(214,120,158,0.25);
+    opacity:0; animation:riseIn 1.4s ease forwards 0.8s;
+  }
+  .route-line{ width:min(320px,80vw); margin:18px auto 6px; opacity:0; animation:riseIn 1.4s ease forwards 1.3s; }
+  .intro-sub{
+    margin-top:14px; font-size:clamp(1rem,3vw,1.25rem); font-style:italic; color:var(--ink);
+    font-family:'Shippori Mincho', serif; max-width:480px; opacity:0;
+    animation:riseIn 1.4s ease forwards 1.8s;
+  }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(18px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ---------- LIVE COUNTER ---------- */
+  #counter{
+    background:linear-gradient(180deg, var(--blush) 0%, var(--white) 100%);
+    text-align:center;
+  }
+  .counter-content{ max-width:640px; }
+  .counter-title{ font-size:clamp(2rem,6vw,2.8rem); color:var(--rose-deep); margin:6px 0 30px; }
+  .counter-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-bottom:26px; }
+  .counter-box{
+    background:var(--white); border:1px solid var(--petal); border-radius:14px;
+    padding:20px 22px; min-width:88px;
+    box-shadow:0 10px 26px rgba(214,120,158,0.15);
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .counter-num{ font-family:'Shippori Mincho', serif; font-size:clamp(1.7rem,5vw,2.4rem); color:var(--rose-deep); font-variant-numeric:tabular-nums; }
+  .counter-label{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--leaf); }
+  .counter-caption{ font-family:'Shippori Mincho', serif; font-style:italic; color:var(--ink); font-size:1.05rem; max-width:480px; margin:0 auto; }
+
+  /* ---------- MEETUP (July 8, distinct from trips) ---------- */
+  #meetup{
+    background:linear-gradient(180deg, var(--white) 0%, var(--blush) 18%, var(--blush) 100%);
+    padding-top:80px;
+  }
+  .meetup-card{
+    position:relative; overflow:hidden;
+    max-width:600px; border-radius:16px;
+    padding:40px 34px; text-align:center;
+    box-shadow:0 16px 40px rgba(214,120,158,0.18);
+    border:1px solid var(--petal);
+    background-image:
+      linear-gradient(rgba(255,253,251,0.88), rgba(255,253,251,0.92)),
+      url('assets/images/meetup-bg.jpg'),
+      repeating-linear-gradient(45deg, var(--blush), var(--blush) 10px, #ffe6ee 10px, #ffe6ee 20px);
+    background-size:cover; background-position:center;
+  }
+  .meetup-card > *{ position:relative; z-index:2; }
+  .meetup-label{ font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--rose); margin-bottom:10px; }
+  .meetup-title{ font-size:2rem; color:var(--rose-deep); margin-bottom:14px; }
+  .meetup-date{ font-size:0.9rem; color:var(--leaf); margin-bottom:18px; letter-spacing:1px; }
+  .meetup-text{ font-size:1.02rem; line-height:1.7; color:var(--ink); }
+
+  /* ---------- JOURNEY (trips) ---------- */
+  #journey{
+    background:linear-gradient(180deg, var(--white) 0%, var(--blush) 18%, var(--blush) 75%, transparent 100%);
+    padding-top:90px;
+  }
+  .journey-title{ font-size:clamp(2.2rem,6vw,3.2rem); text-align:center; margin-bottom:8px; color:var(--rose-deep); }
+  .journey-subtitle{ text-align:center; max-width:560px; margin:0 auto 20px; font-size:1.02rem; color:var(--ink); opacity:0.85; }
+  .route-caption{ text-align:center; font-family:'Shippori Mincho',serif; font-style:italic; color:var(--leaf); margin-bottom:56px; font-size:0.98rem; }
+
+  .trip-cards{ display:flex; flex-direction:column; gap:56px; width:100%; max-width:920px; position:relative; }
+  .trip-card{
+    background:var(--white);
+    border-radius:16px;
+    box-shadow:0 18px 40px rgba(214,120,158,0.16);
+    display:flex; flex-wrap:wrap; overflow:hidden;
+    position:relative;
+    border:1px solid var(--petal);
+  }
+  .trip-photo{
+    flex:1 1 280px; aspect-ratio: 3 / 4; min-height:0;
+    background:repeating-linear-gradient(45deg, var(--blush), var(--blush) 10px, #ffe6ee 10px, #ffe6ee 20px);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--rose-deep); font-size:14px; text-align:center; padding:20px;
+    border-right:2px dashed var(--petal-deep);
+    overflow:hidden;
+  }
+  .trip-info{ flex:1 1 300px; padding:50px 26px; position:relative; }
+  .trip-place{ font-size:1.5rem; margin-bottom:6px; color:var(--rose-deep); }
+  .trip-date{ display:block; font-size:12px; color:var(--leaf); margin-bottom:16px; letter-spacing:1px; text-transform:uppercase; }
+  .trip-memory{ font-size:0.98rem; line-height:1.65; color:var(--ink); }
+  .stamp{
+    position:absolute; top:18px; right:18px; width:52px; height:52px; border-radius:50%;
+    border:2px dashed var(--rose); display:flex; align-items:center; justify-content:center;
+    font-size:20px; color:var(--rose); opacity:0.85; transform:rotate(10deg);
+  }
+
+  /* ---------- IMAGE CAROUSEL ---------- */
+  .carousel{ position:relative; width:100%; height:100%; }
+  .carousel-slide{
+    position:absolute; inset:0; opacity:0; transition:opacity 0.8s ease;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--rose-deep); font-size:14px; text-align:center; padding:0px;
+    overflow:hidden;
+  }
+  .carousel-slide.active{ position:absolute; opacity:1; }
+  .carousel-slide img{
+    width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+  }
+  .carousel-dots{
+    position:absolute; bottom:12px; left:0; right:0; z-index:5;
+    display:flex; justify-content:center; gap:7px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.55);
+    box-shadow:0 0 0 1px rgba(214,120,158,0.3);
+    transition:background 0.3s ease, transform 0.3s ease;
+  }
+  .dot.active{ background:var(--rose); transform:scale(1.3); }
+
+  /* ---------- RAIN OVERLAY (Ambanad card) ---------- */
+  .rain-card{ position:relative; }
+  .rain-overlay{
+    position:absolute; inset:0; z-index:6; pointer-events:none;
+    background-image:repeating-linear-gradient(112deg, rgba(255,255,255,0.55) 0px, rgba(255,255,255,0.55) 1px, transparent 1px, transparent 9px);
+    opacity:0.35;
+    animation:rainMove 0.5s linear infinite;
+  }
+  @keyframes rainMove{ from{ background-position:0 0; } to{ background-position:-14px 30px; } }
+  @media (prefers-reduced-motion: reduce){ .rain-overlay{ animation:none; } }
+
+  /* ---------- STACKED TRIP CARD VARIANT (Ambanad & Mathoor) ---------- */
+  .trip-card-stacked{ flex-direction:column; }
+  .trip-card-stacked .trip-photo{
+    flex:1 1 auto; width:100%; aspect-ratio: 16 / 9;
+    border-right:none; border-bottom:2px dashed var(--petal-deep);
+  }
+  .trip-info-photo{
+    position:relative; overflow:hidden; padding-bottom:32px;
+  }
+  @media (min-width:601px){
+    .trip-info-photo{ aspect-ratio: 16 / 9; min-height:350px; }
+  }
+  .trip-info-photo .bg-slide{
+    position:absolute; inset:0; z-index:0;
+    background-size:cover; background-position:center;
+    background:repeating-linear-gradient(45deg, #e9c3ce, #e9c3ce 10px, #ddb0bf 10px, #ddb0bf 20px);
+    opacity:0; animation:bgSlideFade 18s ease-in-out infinite;
+  }
+  .trip-info-photo .bg-slide img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center; display:block;
+  }
+  .trip-info-photo .bg-slide.slide-b{
+    background:repeating-linear-gradient(-45deg, #ddb0bf, #ddb0bf 10px, #d19aad 10px, #d19aad 20px);
+    animation-delay:9s;
+  }
+  @keyframes bgSlideFade{
+    0%, 45%{ opacity:1; }
+    50%, 95%{ opacity:0; }
+    100%{ opacity:1; }
+  }
+  .trip-info-photo::before{
+    content:''; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(74,35,45,0.35) 0%, rgba(74,35,45,0.78) 100%);
+  }
+  .trip-info-photo .stamp,
+  .trip-info-photo .trip-place,
+  .trip-info-photo .trip-date,
+  .trip-info-photo .trip-memory{ position:relative; z-index:2; }
+  .trip-info-photo .trip-place{ color:#fff; }
+  .trip-info-photo .trip-date{ color:#ffe3ec; }
+  .trip-info-photo .trip-memory{ color:#fff5f8; }
+  .trip-info-photo .stamp{ border-color:#fff; color:#fff; background:rgba(255,255,255,0.1); }
+
+  /* ---------- PROMISE ---------- */
+  #promise{
+    background:linear-gradient(180deg, var(--white) 0%, var(--blush) 100%);
+    text-align:center;
+  }
+  .promise-content{ max-width:620px; position:relative; z-index:2; }
+  .promise-title{ font-size:clamp(2rem,6vw,2.8rem); color:var(--rose-deep); margin:6px 0 18px; }
+  .teacup{ width:84px; margin:22px auto; display:block; }
+  .promise-text{ font-family:'Shippori Mincho', serif; font-size:1.12rem; line-height:1.85; color:var(--ink); margin-bottom:20px; }
+  .promise-text em{ color:var(--rose-deep); font-style:normal; font-weight:600; }
+
+  /* ---------- LOVE LETTER ---------- */
+  #letter{ background:var(--white); }
+  .letter-card{
+    max-width:620px; background:var(--blush); border-radius:12px; padding:48px 40px;
+    box-shadow:0 20px 50px rgba(214,120,158,0.16); position:relative; overflow:visible;
+  }
+  .letter-card::before{
+    content:'♥'; position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+    font-size:32px; color:var(--rose); background:var(--blush); width:44px; height:44px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 14px rgba(214,120,158,0.2); z-index:3;
+  }
+  .letter-hearts{ position:absolute; inset:0; overflow:hidden; border-radius:12px; z-index:0; pointer-events:none; }
+  .letter-hearts span{
+    position:absolute; color:var(--petal-deep); opacity:0.28; font-size:20px;
+  }
+  .letter-body{ position:relative; z-index:2; font-family:'Shippori Mincho', serif; font-size:1.2rem; line-height:1.85; color:var(--ink); }
+  .letter-sign{ position:relative; z-index:2; margin-top:26px; text-align:right; font-family:'Klee One', cursive; font-size:1.7rem; color:var(--rose-deep); }
+
+  /* ---------- FINALE ---------- */
+  #finale{
+    background:
+      linear-gradient(180deg, var(--white) 0%, rgba(255,253,251,0.92) 5%, rgba(255,247,250,0.6) 16%, rgba(255,242,246,0.55) 32%, rgba(255,242,246,0.8) 100%),
+      url('assets/images/finale-bg.jpg') center 30%/cover no-repeat;
+    color:var(--rose-deep); text-align:center;
+  }
+  .finale-title{ font-size:clamp(2.4rem,8vw,4rem); margin-bottom:16px; text-shadow:0 2px 16px rgba(255,255,255,0.6); color:var(--rose-deep); }
+  .finale-eyebrow{ font-size:clamp(1.1rem,4vw,1.5rem); letter-spacing:3px; text-transform:uppercase; color:var(--ink); margin-bottom:4px; text-shadow:0 1px 10px rgba(255,255,255,0.5); }
+  .finale-sub{ font-family:'Shippori Mincho', serif; font-style:italic; font-size:1.2rem; max-width:520px; margin-bottom:32px; color:var(--ink); text-shadow:0 1px 10px rgba(255,255,255,0.5); }
+  .replay-btn{
+    background:rgba(255,253,251,0.6); border:1px solid var(--rose); color:var(--rose-deep);
+    padding:12px 28px; border-radius:30px; font-size:13px; letter-spacing:2px; text-transform:uppercase;
+    cursor:pointer; transition:all 0.3s ease; backdrop-filter:blur(4px);
+  }
+  .replay-btn:hover{ background:var(--rose); color:#fff; }
+  .logout-btn{
+    margin-top:14px; display:block; background:transparent; border:none;
+    color:var(--rose-deep); font-family:'Shippori Mincho', serif; font-style:italic;
+    font-size:14px; cursor:pointer; text-decoration:underline; text-underline-offset:4px;
+    opacity:0.85; transition:opacity 0.25s ease;
+  }
+  .logout-btn:hover{ opacity:1; }
+
+  /* ---------- FAREWELL OVERLAY ---------- */
+  #farewell-overlay{
+    position:fixed; inset:0; z-index:998;
+    background:radial-gradient(ellipse at center, var(--blush) 0%, var(--white) 75%);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transition:opacity 1s ease, visibility 1s ease;
+    text-align:center; overflow:hidden;
+  }
+  #farewell-overlay.show{ opacity:1; visibility:visible; }
+  .farewell-petals{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .farewell-content{ position:relative; z-index:2; max-width:420px; padding:20px; }
+  .farewell-mark{ font-size:34px; margin-bottom:10px; }
+  .farewell-title{ font-size:clamp(2rem,7vw,3rem); color:var(--rose-deep); margin-bottom:16px; }
+  .farewell-text{ font-family:'Shippori Mincho', serif; font-style:italic; color:var(--ink); font-size:1.05rem; line-height:1.7; margin-bottom:28px; }
+  .farewell-return{
+    background:var(--rose); color:#fff; border:none; padding:11px 26px;
+    border-radius:30px; font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+    cursor:pointer; transition:background 0.25s ease;
+  }
+  .farewell-return:hover{ background:var(--rose-deep); }
+  .confetti-piece{
+    position:absolute; top:-20px; width:10px; height:10px; opacity:0.9; border-radius:50% 0 50% 50%;
+    animation:confettiFall 3.2s linear forwards;
+  }
+  @keyframes confettiFall{ to{ transform:translateY(110vh) rotate(540deg); opacity:0.3; } }
+
+  #music-toggle{ display:none; }
+
+  /* ---------- SONG PLAY CARD ---------- */
+  #song{
+    min-height:38vh; padding:110px 20px 70px;
+    background:linear-gradient(180deg, var(--blush) 0%, var(--white) 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .song-card{
+    display:flex; align-items:center; gap:18px;
+    background:var(--white); border:1px solid var(--petal-deep);
+    border-radius:50px; padding:14px 28px 14px 14px;
+    box-shadow:0 12px 30px rgba(214,120,158,0.18);
+    cursor:pointer; transition:transform 0.25s ease, box-shadow 0.25s ease;
+    max-width:360px; margin:0 auto;
+  }
+  .song-card:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(214,120,158,0.26); }
+  .song-icon{
+    flex:0 0 auto; width:48px; height:48px; border-radius:50%;
+    background:var(--rose); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:16px; transition:background 0.3s ease;
+  }
+  .song-card.playing .song-icon{ background:var(--rose-deep); }
+  .song-text{ display:flex; flex-direction:column; }
+  .song-label{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--rose); margin-bottom:3px; }
+  .song-name{ font-size:1.15rem; color:var(--ink); }
+  .song-bars{ display:flex; align-items:flex-end; gap:2px; height:14px; margin-left:auto; opacity:0; transition:opacity 0.3s ease; }
+  .song-card.playing .song-bars{ opacity:1; }
+  .song-bars span{ width:3px; background:var(--rose); border-radius:2px; animation:bar 0.9s ease-in-out infinite; }
+  .song-bars span:nth-child(1){ height:6px; animation-delay:0s; }
+  .song-bars span:nth-child(2){ height:14px; animation-delay:0.2s; }
+  .song-bars span:nth-child(3){ height:9px; animation-delay:0.4s; }
+  @keyframes bar{ 0%,100%{ transform:scaleY(0.4); } 50%{ transform:scaleY(1); } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+  }
+  @media (max-width:600px){
+    .trip-photo{ border-right:none; border-bottom:2px dashed var(--petal-deep); aspect-ratio: 4 / 5; flex-basis:auto; }
+    .letter-card{ padding:36px 24px; }
+    .branch-corner{ width:140px; }
+  }
