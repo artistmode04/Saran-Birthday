@@ -176,7 +176,7 @@
   }
   .meetup-card{
     position:relative; overflow:hidden;
-    max-width:600px; border-radius:16px;
+    max-width:700px; border-radius:16px;
     padding:40px 34px; text-align:center;
     box-shadow:0 16px 40px rgba(214,120,158,0.18);
     border:1px solid var(--petal);
@@ -269,10 +269,11 @@
     border-right:none; border-bottom:2px dashed var(--petal-deep);
   }
   .trip-info-photo{
-    position:relative; overflow:hidden; padding-bottom:32px;
+    position:relative; overflow:visible; padding:30px 26px 32px; min-height:420px;
+    display:flex; flex-direction:column; justify-content:flex-start;
   }
   @media (min-width:601px){
-    .trip-info-photo{ aspect-ratio: 16 / 9; min-height:350px; }
+    .trip-info-photo{ min-height:420px; }
   }
   .trip-info-photo .bg-slide{
     position:absolute; inset:0; z-index:0;
