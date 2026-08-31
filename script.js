@@ -3,10 +3,50 @@ const overlay = document.getElementById('envelope-overlay');
   const passwordSubmit = document.getElementById('envelope-submit');
   const passwordError = document.getElementById('password-error');
   const passwordGate = document.querySelector('.password-gate');
-  const CORRECT_CODE = '010709';
+  const USER_CODES = {
+    '010709': 'Saran',
+    '010726': 'Praveen'
+  };
+
+  // ---------- Visitor logging (User, Browser, OS, Device, IST time) ----------
+  const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzeyoBiH0_ZMKlKA-mCuuURvc3V1GwuuaEPnnR87ASvtnQY2w2PvXO7RmzIbqxcc2Bo6w/exec';
+
+  function detectBrowser(ua){
+    if (ua.includes('Edg/')) return 'Edge';
+    if (ua.includes('Chrome/')) return 'Chrome';
+    if (ua.includes('Safari/') && !ua.includes('Chrome')) return 'Safari';
+    if (ua.includes('Firefox/')) return 'Firefox';
+    return 'Unknown';
+  }
+
+  function detectOS(ua){
+    if (ua.includes('Windows')) return 'Windows';
+    if (ua.includes('Mac OS')) return 'macOS';
+    if (ua.includes('Android')) return 'Android';
+    if (ua.includes('iPhone') || ua.includes('iPad')) return 'iOS';
+    if (ua.includes('Linux')) return 'Linux';
+    return 'Unknown';
+  }
+
+  function logVisit(userLabel){
+    const ua = navigator.userAgent;
+    const payload = {
+      user: userLabel,
+      browser: detectBrowser(ua),
+      os: detectOS(ua),
+      deviceType: /Mobi|Android/i.test(ua) ? 'Mobile' : 'Desktop'
+    };
+    fetch(WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(payload)
+    }).catch(() => {}); // fail silently if offline
+  }
 
   function tryOpenEnvelope(){
-    if(passwordInput.value.trim() === CORRECT_CODE){
+    const enteredCode = passwordInput.value.trim();
+    if(USER_CODES[enteredCode]){
+      logVisit(USER_CODES[enteredCode]);
       overlay.classList.add('open');
       setTimeout(() => overlay.classList.add('hidden'), 700);
     } else {
@@ -156,7 +196,7 @@ const overlay = document.getElementById('envelope-overlay');
       idx = (idx + 1) % slides.length;
       slides[idx].classList.add('active');
       dots[idx].classList.add('active');
-    }, 6000);
+    }, 3200);
   });
 
   // ---------- Farewell overlay (creative logout) ----------
